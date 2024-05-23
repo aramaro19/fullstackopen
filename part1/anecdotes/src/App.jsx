@@ -26,16 +26,34 @@ const App = () => {
     setVote(votesArray)
   }
 
+  const getMostVoted = () => {
+    let highest = votes[0]
+    let highestIndex = 0
+    votes.forEach((element, index) => {
+      if(element > highest) {
+        highest = element
+        highestIndex = index
+      }
+    });
+    return highestIndex
+  }
+
   return (
     <div>
-      <p>
-        {anecdotes[selected]}
-      </p>
-      <p>
-        has {votes[selected]} votes
-      </p>
+      <DisplayAnecdote header="Anecdote of the day" anecdotes={anecdotes} selected={selected} votes={votes}/>
       <Button text="vote" onClick={handleVote}/>
       <Button text="next anecdote" onClick={setRandomAnecdote} />
+      <DisplayAnecdote header="Anecdote with most votes" anecdotes={anecdotes} selected={getMostVoted()} votes={votes} />
+    </div>
+  )
+}
+
+const DisplayAnecdote = ({ header, anecdotes, selected, votes }) => {
+  return (
+    <div>
+      <h1>{header}</h1>
+      <p>{anecdotes[selected]}</p>
+      has {votes[selected]} votes
     </div>
   )
 }
