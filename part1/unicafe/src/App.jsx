@@ -20,11 +20,17 @@ const App = () => {
       <p>
         good {good}<br></br>
         neutral {neutral} <br></br>
-        bad {bad}
+        bad {bad}<br></br>
+        all {good + neutral + bad} <br></br>
+        average {getAverage(good, neutral, bad)} <br></br> 
+        positive {getPositive(good, neutral, bad)}
       </p>   
     </div>
   )
 }
+
+const getAverage = (good, neutral, bad) => (good - bad) / (good + neutral + bad)
+const getPositive = (good, neutral, bad) => good / (good + neutral + bad)
 
 const Button = ({ handleClick, text }) => <button onClick={handleClick}>{text}</button>
 
