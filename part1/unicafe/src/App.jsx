@@ -36,17 +36,19 @@ const Statistics = ({ good, neutral, bad }) => {
       </div>
     )
   } else return (
-    <div>
+    <table> 
+      <tbody>
         <StatisticLine text="good" value={good} />
         <StatisticLine text="neutral" value={neutral} />
         <StatisticLine text="bad" value={bad} />
         <StatisticLine text="all" value={totalFeedback} />
         <StatisticLine text="average" value={averageFeedback} />
-        <StatisticLine text="positive" value={positivePercentFeedback} />
-    </div>
+        <StatisticLine text="positive" value={positivePercentFeedback + " %"} />
+      </tbody>
+    </table>
   )
 }
 
-const StatisticLine = ({ text, value }) => <div>{text} {value}</div>
+const StatisticLine = ({ text, value }) => <tr><td>{text}</td><td>{value}</td></tr>
 
 export default App
