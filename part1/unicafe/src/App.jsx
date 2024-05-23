@@ -16,22 +16,29 @@ const App = () => {
       <Button text="good" handleClick={handleGood} />
       <Button text="neutral" handleClick={handleNeutral} />
       <Button text="bad" handleClick={handleBad} />
+      <Statistics good={good} neutral={neutral} bad={bad} />  
+    </div>
+  )
+}
+
+const Button = ({ handleClick, text }) => <button onClick={handleClick}>{text}</button>
+
+const Statistics = ({ good, neutral, bad }) => {
+  const averageFeedback = (good - bad) / (good + neutral + bad)
+  const positivePercentFeedback = good / (good + neutral + bad)
+  return (
+    <div>
       <h1>statistics</h1>
       <p>
         good {good}<br></br>
         neutral {neutral} <br></br>
         bad {bad}<br></br>
         all {good + neutral + bad} <br></br>
-        average {getAverage(good, neutral, bad)} <br></br> 
-        positive {getPositive(good, neutral, bad)}
+        average {averageFeedback} <br></br> 
+        positive {positivePercentFeedback}
       </p>   
     </div>
   )
 }
-
-const getAverage = (good, neutral, bad) => (good - bad) / (good + neutral + bad)
-const getPositive = (good, neutral, bad) => good / (good + neutral + bad)
-
-const Button = ({ handleClick, text }) => <button onClick={handleClick}>{text}</button>
 
 export default App
