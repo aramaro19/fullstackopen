@@ -5,6 +5,7 @@ import personService from "./services/persons.js"
 import Filter from "./components/Filter.jsx"
 import PersonForm from "./components/PersonForm.jsx"
 import Persons from "./components/Persons.jsx"
+import Notification from './components/Notification.jsx'
 
 const App = () => {
 
@@ -12,6 +13,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [nameFilter, setNameFilter] = useState('')
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -38,8 +40,7 @@ const App = () => {
               }
               return person
             }))
-            setNewName("")
-            setNewNumber("")
+            setMessageAndClearFields(`Updated ${response.data.name}`)
         })
       }
     } else {
@@ -47,8 +48,7 @@ const App = () => {
       .create(personObject)
       .then(response => {
         setPersons(persons.concat(response.data))
-        setNewName("")
-        setNewNumber("")
+        setMessageAndClearFields(`Added ${response.data.name}`)
       })
     }
   }
@@ -59,8 +59,18 @@ const App = () => {
       .remove(person.id)
       .then(response => {
         setPersons(persons.filter(person => person.id !== response.data.id))
+        setMessageAndClearFields(`Deleted ${response.data.name}`)
       })
     }
+  }
+
+  const setMessageAndClearFields = message => {
+    setNewName("")
+    setNewNumber("")
+    setMessage(message)
+        setTimeout(() => {
+          setMessage(null)
+        }, 3000);
   }
 
 
@@ -74,6 +84,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter inputValue={nameFilter} onChangeHandler={handleFilterChange} />
       <h3>add a new</h3>
       <PersonForm 
@@ -90,6 +101,8 @@ const App = () => {
     </div>
   )
 }
+
+
 
 
 export default App
