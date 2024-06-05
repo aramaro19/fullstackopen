@@ -14,6 +14,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [nameFilter, setNameFilter] = useState('')
   const [message, setMessage] = useState(null)
+  const [isError, setIsError] =  useState(false)
 
   useEffect(() => {
     personService
@@ -41,7 +42,11 @@ const App = () => {
               return person
             }))
             setMessageAndClearFields(`Updated ${response.data.name}`)
-        })
+          })
+          .catch(error => {
+            setPersons(persons.filter(person => person.name !== newName))
+            setMessageAndClearFields(`Information of ${newName} has already been removed from server`, true)
+          })
       }
     } else {
       personService
@@ -64,13 +69,17 @@ const App = () => {
     }
   }
 
-  const setMessageAndClearFields = message => {
+  const setMessageAndClearFields = (message, error = false) => {
+    if(error === true) {
+      setIsError(true)
+    }
+    setMessage(message)
+    setTimeout(() => {
+      setMessage(null)
+      setIsError(false)
+    }, 3000);
     setNewName("")
     setNewNumber("")
-    setMessage(message)
-        setTimeout(() => {
-          setMessage(null)
-        }, 3000);
   }
 
 
@@ -84,7 +93,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} />
+      <Notification message={message} error={isError} />
       <Filter inputValue={nameFilter} onChangeHandler={handleFilterChange} />
       <h3>add a new</h3>
       <PersonForm 
